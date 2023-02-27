@@ -20,7 +20,7 @@ Some generated video results on MHAD dataset.
 <img src="examples/mhad1.gif" width="500" height="530"/>
 </div>
 <div align=center>
-<img src="examples/mhad2.gif" width="500" height="530"/>
+<img src="examples/mhad2.gif" width="500" height="416"/>
 </div>
 
 Some generated video results on NATOPS dataset.
