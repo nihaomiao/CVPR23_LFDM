@@ -1,5 +1,4 @@
-# Created on 08/08/2022
-# build MUG dataset for RegionMM
+# build MUG dataset for MRAA
 
 import os
 
@@ -219,9 +218,8 @@ if __name__ == "__main__":
     import yaml
     config_file = "/workspace/code/nec-project/articulated-animation-dgx/config/mug128.yaml"
     with open(config_file) as f:
-        config = yaml.load(f)
+        config = yaml.safe_load(f)
     root_dir = "/data/hfn5052/text2motion/MUG"
-    # dataset = FramesDataset(**config['dataset_params'])
     dataset = MUG_pair_test(data_dir=root_dir)
     test_loader = torch.utils.data.DataLoader(dataset,
                                               batch_size=100)

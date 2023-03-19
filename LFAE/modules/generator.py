@@ -10,8 +10,8 @@ In no event will Snap Inc. be liable for any damages or losses of any kind arisi
 import torch
 from torch import nn
 import torch.nn.functional as F
-from modules.util import ResBlock2d, SameBlock2d, UpBlock2d, DownBlock2d
-from modules.pixelwise_flow_predictor import PixelwiseFlowPredictor
+from LFAE.modules.util import ResBlock2d, SameBlock2d, UpBlock2d, DownBlock2d
+from LFAE.modules.pixelwise_flow_predictor import PixelwiseFlowPredictor
 
 
 class Generator(nn.Module):

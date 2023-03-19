@@ -1,6 +1,4 @@
-# Created on 07/25/2022
-# Estimate flow and occlusion mask via RegionMM for MHAD dataset
-# updated on 07/27/2022: add photometric loss, seems to be useless
+# Estimate flow and occlusion mask via MRAA for MUG dataset
 
 import os
 import sys

@@ -9,7 +9,7 @@ In no event will Snap Inc. be liable for any damages or losses of any kind arisi
 
 from torch import nn
 import torch
-from modules.util import Encoder
+from LFAE.modules.util import Encoder
 
 
 class BGMotionPredictor(nn.Module):
