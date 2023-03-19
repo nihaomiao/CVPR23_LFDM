@@ -10,7 +10,7 @@ In no event will Snap Inc. be liable for any damages or losses of any kind arisi
 from torch import nn
 import torch
 import torch.nn.functional as F
-from modules.util import AntiAliasInterpolation2d, make_coordinate_grid
+from LFAE.modules.util import AntiAliasInterpolation2d, make_coordinate_grid
 from torchvision import models
 import numpy as np
 from torch.autograd import grad

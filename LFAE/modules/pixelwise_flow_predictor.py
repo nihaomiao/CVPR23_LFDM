@@ -10,8 +10,8 @@ In no event will Snap Inc. be liable for any damages or losses of any kind arisi
 from torch import nn
 import torch.nn.functional as F
 import torch
-from modules.util import Hourglass, AntiAliasInterpolation2d, make_coordinate_grid, region2gaussian
-from modules.util import to_homogeneous, from_homogeneous
+from LFAE.modules.util import Hourglass, AntiAliasInterpolation2d, make_coordinate_grid, region2gaussian
+from LFAE.modules.util import to_homogeneous, from_homogeneous
 
 
 class PixelwiseFlowPredictor(nn.Module):

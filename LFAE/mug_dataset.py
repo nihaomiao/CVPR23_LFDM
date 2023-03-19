@@ -1,16 +1,11 @@
-# build MUG dataset for MRAA
+# build MUG dataset for RegionMM
 
 import os
-
-import torch.utils.data
 import imageio
-from imageio import mimread
 
 import numpy as np
 from torch.utils.data import Dataset
-import pandas as pd
 from augmentation import AllAugmentationTransform
-import glob
 from functools import partial
 import cv2
 import matplotlib.pyplot as plt
@@ -83,14 +78,7 @@ class FramesDataset(Dataset):
 
     def __getitem__(self, idx):
         if self.id_sampling:
-            # TODO
-            name = self.videos[idx]
-            try:
-                sub_name = name.split("_")[1]
-                path = np.random.choice(glob.glob(os.path.join(self.root_dir, 'a*_%s_t*' % sub_name)))
-            except ValueError:
-                raise ValueError("File formatting is not correct for id_sampling=True. "
-                                 "Change file formatting, or set id_sampling=False.")
+            raise NotImplementedError
         else:
             name = self.videos[idx]
             path = os.path.join(self.root_dir, name)
@@ -148,80 +136,5 @@ class DatasetRepeater(Dataset):
         return self.dataset[idx % self.dataset.__len__()]
 
 
-# added by nhm
-class MUG_pair_test(Dataset):
-    def __init__(self, data_dir, image_size=128):
-        super(MUG_pair_test, self).__init__()
-        self.image_size = image_size
-        test_ID = ['001', '002', '006', '007', '010', '013', '014', '020', '027', '032',
-                   '033', '040', '046', '048', '049', '052', '064', '065', '066', '070',
-                   '072', '073', '074', '078', '079', '082']
-        session_ID = ["002", "003", "049"]
-        expression = ['anger', 'disgust', 'fear', 'happiness', 'neutral', 'sadness', 'surprise']
-
-        self.video_path_list = []
-        for video_name in test_ID:
-            if video_name not in session_ID:
-                for exp_name in expression:
-                    cur_video_dir_path = os.path.join(data_dir, video_name, exp_name)
-                    if os.path.exists(cur_video_dir_path):
-                        cur_video_name_list = os.listdir(cur_video_dir_path)
-                        cur_video_name_list.sort()
-                        for cur_video_name in cur_video_name_list:
-                            cur_video_path = os.path.join(cur_video_dir_path, cur_video_name)
-                            self.video_path_list.append(cur_video_path)
-            else:
-                for session_name in ["session0", "session0"]:
-                    for exp_name in expression:
-                        cur_video_dir_path = os.path.join(data_dir, video_name, session_name, exp_name)
-                        if os.path.exists(cur_video_dir_path):
-                            cur_video_name_list = os.listdir(cur_video_dir_path)
-                            cur_video_name_list.sort()
-                            for cur_video_name in cur_video_name_list:
-                                cur_video_path = os.path.join(cur_video_dir_path, cur_video_name)
-                                self.video_path_list.append(cur_video_path)
-
-    def __len__(self):
-        return len(self.video_path_list)
-
-    def __getitem__(self, index):
-        video_path = self.video_path_list[index]
-        video_name = "_".join(video_path.split("/")[-3:]) if "session" not in video_path \
-            else "_".join(video_path.split("/")[-4:])
-        frame_name_list = os.listdir(video_path)
-        frame_name_list = [x for x in frame_name_list if x.endswith("jpg") or x.endswith("png")]
-        frame_name_list.sort()
-        frame_path_list = [os.path.join(video_path, frame_name) for frame_name in frame_name_list]
-        sample_path_list = [frame_path_list[1], frame_path_list[len(frame_path_list)//2]]
-        src_img_arr = imageio.imread(sample_path_list[0])
-        tar_img_arr = imageio.imread(sample_path_list[1])
-
-        src_img_name = os.path.basename(sample_path_list[0])
-        tar_img_name = os.path.basename(sample_path_list[1])
-
-        src_img_arr = np.asarray(src_img_arr, np.float32)
-        tar_img_arr = np.asarray(tar_img_arr, np.float32)
-
-        src_img_arr = resize(src_img_arr, desired_size=self.image_size, interpolation=cv2.INTER_AREA)
-        tar_img_arr = resize(tar_img_arr, desired_size=self.image_size, interpolation=cv2.INTER_AREA)
-
-        src_img_arr = src_img_arr.transpose((2, 0, 1))
-        tar_img_arr = tar_img_arr.transpose((2, 0, 1))
-
-        src_img_arr = src_img_arr/255.0
-        tar_img_arr = tar_img_arr/255.0
-
-        return src_img_arr, tar_img_arr, src_img_name, tar_img_name, video_name
-
-
 if __name__ == "__main__":
-    import yaml
-    config_file = "/workspace/code/nec-project/articulated-animation-dgx/config/mug128.yaml"
-    with open(config_file) as f:
-        config = yaml.safe_load(f)
-    root_dir = "/data/hfn5052/text2motion/MUG"
-    dataset = MUG_pair_test(data_dir=root_dir)
-    test_loader = torch.utils.data.DataLoader(dataset,
-                                              batch_size=100)
-    for i_iter, batch in enumerate(test_loader):
-        print(i_iter)
+    pass

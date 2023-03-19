@@ -1,7 +1,10 @@
-# Estimate flow and occlusion mask via MRAA for MUG dataset
+# Estimate flow and occlusion mask via RegionMM (or called MRAA) for MUG dataset
+# this code is based on RegionMM from Snap Inc.
+# https://github.com/snap-research/articulated-animation
 
 import os
 import sys
+sys.path.append("/workspace/code/CVPR23_LFDM")  # change this path to your current work directory
 import math
 import yaml
 from argparse import ArgumentParser
@@ -52,19 +55,18 @@ if __name__ == "__main__":
         raise Exception("You must use Python 3 or higher. Recommended version is Python 3.7")
 
     parser = ArgumentParser()
-    parser.add_argument("--postfix", default="")
+    parser.add_argument("--postfix", default="")  # indicate different settings
     parser.add_argument("--random-seed", default=1234)
-    parser.add_argument("--set-start", default=True)
+    parser.add_argument("--set-start", default=False)
     parser.add_argument("--config",
-                        default="/workspace/code/nec-project/articulated-animation-dgx/config/mug128.yaml",
+                        default="/workspace/code/CVPR23_LFDM/config/mug128.yaml",
                         help="path to config")
     parser.add_argument("--mode", default="train", choices=["train"])
     parser.add_argument("--log_dir",
                         default='/data/hfn5052/text2motion/RegionMM/log-mug',
                         help="path to log into")
-    parser.add_argument("--checkpoint",
-                        default="/data/hfn5052/text2motion/RegionMM/log-mug/mug128/snapshots/RegionMM.pth",
-                        # default="/data/hfn5052/text2motion/RegionMM/taichi256.pth",
+    parser.add_argument("--checkpoint",  # use the pretrained VOX model given by Snap
+                        default="/data/hfn5052/text2motion/RegionMM/vox256.pth",
                         help="path to checkpoint to restore")
     parser.add_argument("--device_ids", default="0", type=lambda x: list(map(int, x.split(','))),
                         help="Names of the devices comma separated.")
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     setup_seed(opt.random_seed)
 
     with open(opt.config) as f:
-        config = yaml.load(f)
+        config = yaml.safe_load(f)
 
     log_dir = os.path.join(opt.log_dir, os.path.basename(opt.config).split('.')[0]+opt.postfix)
     if not os.path.exists(log_dir):
@@ -84,8 +86,10 @@ if __name__ == "__main__":
     if not os.path.exists(os.path.join(log_dir, os.path.basename(opt.config))):
         copy(opt.config, log_dir)
 
+    # the directory to save checkpoints
     config["snapshots"] = os.path.join(log_dir, 'snapshots'+opt.postfix)
     os.makedirs(config["snapshots"], exist_ok=True)
+    # the directory to save images of training results
     config["imgshots"] = os.path.join(log_dir, 'imgshots'+opt.postfix)
     os.makedirs(config["imgshots"], exist_ok=True)
     config["set_start"] = opt.set_start
@@ -97,10 +101,6 @@ if __name__ == "__main__":
     print("postfix:", opt.postfix)
     print("checkpoint:", opt.checkpoint)
     print("batch size:", config['train_params']['batch_size'])
-
-    # add photometric loss
-    if "photometric" in opt.postfix:
-        config['train_params']['loss_weights']['photometric'] = 10
 
     generator = Generator(num_regions=config['model_params']['num_regions'],
                           num_channels=config['model_params']['num_channels'],
@@ -140,7 +140,8 @@ if __name__ == "__main__":
     dataset = FramesDataset(**config['dataset_params'])
     config["num_example_per_epoch"] = config['train_params']['num_repeats'] * len(dataset)
     config["num_step_per_epoch"] = math.ceil(config["num_example_per_epoch"]/float(config['train_params']['batch_size']))
-    config["save_ckpt_freq"] = config["num_step_per_epoch"] * (config['train_params']['max_epochs'] // 5)
+    # save 10 checkpoints in total
+    config["save_ckpt_freq"] = config["num_step_per_epoch"] * (config['train_params']['max_epochs'] // 10)
     print("save ckpt freq:", config["save_ckpt_freq"])
 
     print("Training...")

@@ -1,11 +1,5 @@
-"""
-Copyright Snap Inc. 2021. This sample code is made available by Snap Inc. for informational purposes only.
-No license, whether implied or otherwise, is granted in or to such code (including any rights to copy, modify,
-publish, distribute and/or commercialize such code), unless you have entered into a separate agreement for such rights.
-Such code is provided as-is, without warranty of any kind, express or implied, including any warranties of merchantability,
-title, fitness for a particular purpose, non-infringement, or that such code is free of defects, errors or viruses.
-In no event will Snap Inc. be liable for any damages or losses of any kind arising from the sample code or your use thereof.
-"""
+# train a LFAE
+# this code is based on RegionMM (MRAA): https://github.com/snap-research/articulated-animation
 import os.path
 import torch
 from torch.utils.data import DataLoader
@@ -14,7 +8,7 @@ from torch.optim.lr_scheduler import MultiStepLR
 from sync_batchnorm import DataParallelWithCallback
 from frames_dataset import DatasetRepeater
 import timeit
-from modules.utils_mhad import Visualizer
+from modules.util import Visualizer
 import imageio
 import math
 
@@ -86,7 +80,6 @@ def train(config, generator, region_predictor, bg_predictor, checkpoint, log_dir
     losses_perc = AverageMeter()
     losses_equiv_shift = AverageMeter()
     losses_equiv_affine = AverageMeter()
-    losses_photometric = AverageMeter()
 
     cnt = 0
     epoch_cnt = start_epoch
@@ -114,22 +107,19 @@ def train(config, generator, region_predictor, bg_predictor, checkpoint, log_dir
             losses_perc.update(loss_values[0], bs)
             losses_equiv_shift.update(loss_values[1], bs)
             losses_equiv_affine.update(loss_values[2], bs)
-            losses_photometric.update(loss_values[3], bs)
 
             if actual_step % train_params["print_freq"] == 0:
                 print('iter: [{0}]{1}/{2}\t'
                       'loss {loss.val:.4f} ({loss.avg:.4f})\t'
                       'loss_perc {loss_perc.val:.4f} ({loss_perc.avg:.4f})\n'
                       'loss_shift {loss_shift.val:.4f} ({loss_shift.avg:.4f})\t'
-                      'loss_affine {loss_affine.val:.4f} ({loss_affine.avg:.4f})\t'
-                      'loss_photo {loss_photo.val:.4f} ({loss_photo.avg:.4f})'
+                      'loss_affine {loss_affine.val:.4f} ({loss_affine.avg:.4f})'
                     .format(
                     cnt, actual_step, final_step,
                     loss=total_losses,
                     loss_perc=losses_perc,
                     loss_shift=losses_equiv_shift,
-                    loss_affine=losses_equiv_affine,
-                    loss_photo=losses_photometric
+                    loss_affine=losses_equiv_affine
                 ))
 
             if actual_step % train_params['save_img_freq'] == 0:
