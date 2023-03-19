@@ -34,3 +34,12 @@ Applied LFDM trained on MUG to FaceForensics dataset.
 <div align=center>
 <img src="examples/new_domain_grid.gif" width="400" height="523"/>
 </div>
+
+Pretrained Models
+-----
+
+|Dataset| Model| Link (Google Drive)|
+|-------|------|-----|
+|MUG|LFAE|https://drive.google.com/file/d/1dRn1wl5TUaZJiiDpIQADt1JJ0_q36MVG/view?usp=share_link|
+|MUG|DM|https://drive.google.com/file/d/1lPVIT_cXXeOVogKLhD9fAT4k1Brd_HHn/view?usp=share_link|
+
