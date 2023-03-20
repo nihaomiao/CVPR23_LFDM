@@ -27,7 +27,9 @@ N_FRAMES = 40
 RANDOM_SEED = 1234
 MEAN = (0.0, 0.0, 0.0)
 cond_scale = 1.
+# downloaded the pretrained DM model and put its path here
 RESTORE_FROM = "/data/hfn5052/text2motion/videoflowdiff_mug/snapshots-j-sl-random-of-tr-rmm/flowdiff_0005_S111600.pth"
+# downloaded the pretrained LFAE model and put its path here
 AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log-mug/mug128/snapshots/RegionMM_0100_S046500.pth"
 CKPT_DIR = os.path.join(root_dir, "demo"+postfix)
 os.makedirs(CKPT_DIR, exist_ok=True)
