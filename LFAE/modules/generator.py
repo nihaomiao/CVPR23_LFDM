@@ -125,3 +125,41 @@ class Generator(nn.Module):
         output_dict["prediction"] = out
 
         return output_dict
+
+    def compute_fea(self, source_image):
+        out = self.first(source_image)
+        for i in range(len(self.down_blocks)):
+            out = self.down_blocks[i](out)
+        return out
+
+    def forward_with_flow(self, source_image, optical_flow, occlusion_map):
+        out = self.first(source_image)
+        skips = [out]
+        for i in range(len(self.down_blocks)):
+            out = self.down_blocks[i](out)
+            skips.append(out)
+
+        output_dict = {}
+        motion_params = {}
+        motion_params["optical_flow"] = optical_flow
+        motion_params["occlusion_map"] = occlusion_map
+        output_dict["deformed"] = self.deform_input(source_image, motion_params['optical_flow'])
+
+        out = self.apply_optical(input_previous=None, input_skip=out, motion_params=motion_params)
+
+        out = self.bottleneck(out)
+        for i in range(len(self.up_blocks)):
+            if self.skips:
+                out = self.apply_optical(input_skip=skips[-(i + 1)], input_previous=out, motion_params=motion_params)
+            out = self.up_blocks[i](out)
+        if self.skips:
+            out = self.apply_optical(input_skip=skips[0], input_previous=out, motion_params=motion_params)
+        out = self.final(out)
+        out = torch.sigmoid(out)
+
+        if self.skips:
+            out = self.apply_optical(input_skip=source_image, input_previous=out, motion_params=motion_params)
+
+        output_dict["prediction"] = out
+
+        return output_dict
