@@ -12,6 +12,8 @@ Updates
 
 Example Videos
 ------
+All the subjects of the following videos are *unseen* during the training. 
+
 Some generated video results on MUG dataset.
 
 <div align=center>
