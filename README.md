@@ -1,6 +1,6 @@
 LFDM
 =====
-The pytorch implementation of our CVPR 2023 paper "Conditional Image-to-Video Generation with Latent Flow Diffusion Models"
+The pytorch implementation of our CVPR 2023 paper [Conditional Image-to-Video Generation with Latent Flow Diffusion Models](https://arxiv.org/pdf/2303.13744.pdf).
 
 This repository is still under development.
 
@@ -8,6 +8,8 @@ This repository is still under development.
 
 Updates
 -----
+[Updated on 03/26/2023] Our paper is available on [arXiv](https://arxiv.org/abs/2303.13744).
+
 [Updated on 03/20/2023] Released a testing demo for MUG dataset.
 
 Example Videos
@@ -56,6 +58,19 @@ Demo
 1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
 2. Set the paths in the code files and config files if needed. The pretrained models for MUG dataset have released. 
 3. Run `python -u demo/demo_mug.py`
+
+Citing LFDM
+-------
+```
+@misc{ni2023conditional,
+      title={Conditional Image-to-Video Generation with Latent Flow Diffusion Models}, 
+      author={Haomiao Ni and Changhao Shi and Kai Li and Sharon X. Huang and Martin Renqiang Min},
+      year={2023},
+      eprint={2303.13744},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
 
 For questions with the code, please feel free to open an issue or contact me: homerhm.ni@gmail.com
 
