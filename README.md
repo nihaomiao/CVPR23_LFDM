@@ -8,7 +8,7 @@ This repository is still under development.
 
 Updates
 -----
-[Updated on 03/26/2023] Added the illustraion of training a LFDM for MUG dataset.
+[Updated on 03/26/2023] Added the illustration of training a LFDM for MUG dataset.
 
 [Updated on 03/26/2023] Now our paper is available on [arXiv](https://arxiv.org/abs/2303.13744).
 
