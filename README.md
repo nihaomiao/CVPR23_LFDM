@@ -8,7 +8,9 @@ This repository is still under development.
 
 Updates
 -----
-[Updated on 03/26/2023] Our paper is available on [arXiv](https://arxiv.org/abs/2303.13744).
+[Updated on 03/26/2023] Added the illustraion of training a LFDM for MUG dataset.
+
+[Updated on 03/26/2023] Now our paper is available on [arXiv](https://arxiv.org/abs/2303.13744).
 
 [Updated on 03/20/2023] Released a testing demo for MUG dataset.
 
@@ -56,8 +58,22 @@ Demo
 **MUG Dataset**
 
 1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
-2. Set the paths in the code files and config files if needed. The pretrained models for MUG dataset have released. 
-3. Run `python -u demo/demo_mug.py`
+2. Run `python -u demo/demo_mug.py` to generate the example videos. Please set the paths in the code files and config file `config/mug128.yaml` if needed. The pretrained models for MUG dataset have released. 
+
+Training LFDM
+----
+The training of our LFDM includes two stages: 1. train a latent flow autoencoder (LFAE) in an unsupervised fashion; 2. train a diffusion model (DM) on the latent space of LFAE.
+
+**MUG Dataset**
+
+1. Download MUG dataset from their [website](https://mug.ee.auth.gr/fed/). 
+2. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
+3. Split the train/test set. You may use the same split as ours, which can be found in `preprocessing/preprocess_MUG.py`.
+4. Run `python -u LFAE/run_mug.py` to train the LFAE. Please set the paths and config file `config/mug128.yaml` if needed. 
+5. Once LFAE is trained, you may measure its self-reconstruction performance by running `python -u LFAE/test_flowautoenc_mug.py`.
+6. Run `python -u DM/train_video_flow_diffusion_mug.py` to train the DM. Please set the paths and config file `config/mug128.yaml` if needed. 
+7. Once DM is trained, you may test its generation performance by running `python -u DM/test_video_flow_diffusion_mug.py`.
+
 
 Citing LFDM
 -------
