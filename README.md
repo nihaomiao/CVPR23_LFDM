@@ -77,6 +77,7 @@ The training of our LFDM includes two stages: 1. train a latent flow autoencoder
 
 Citing LFDM
 -------
+If you find our approaches useful in your research, please consider citing:
 ```
 @misc{ni2023conditional,
       title={Conditional Image-to-Video Generation with Latent Flow Diffusion Models}, 
