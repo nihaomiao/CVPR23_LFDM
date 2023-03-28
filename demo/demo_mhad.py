@@ -22,7 +22,7 @@ GPU = "1"
 postfix = "-j-sl-random-of-tr-rmm"
 INPUT_SIZE = 128
 N_FRAMES = 40
-RANDOM_SEED = 1234
+RANDOM_SEED = 2222
 MEAN = (0.0, 0.0, 0.0)
 cond_scale = 1.
 # downloaded the pretrained DM model and put its path here
@@ -33,8 +33,8 @@ AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log/mhad128/snapshots/Regi
 config_pth = "/workspace/code/CVPR23_LFDM/config/mug128.yaml"
 CKPT_DIR = os.path.join(root_dir, "demo"+postfix)
 os.makedirs(CKPT_DIR, exist_ok=True)
-IMG_DIR = os.path.join(root_dir, "demo_img"+postfix)
-os.makedirs(IMG_DIR, exist_ok=True)
+# IMG_DIR = os.path.join(root_dir, "demo_img"+postfix)
+# os.makedirs(IMG_DIR, exist_ok=True)
 print(root_dir)
 print(postfix)
 print("RESTORE_FROM:", RESTORE_FROM)
