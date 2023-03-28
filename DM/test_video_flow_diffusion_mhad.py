@@ -1,4 +1,4 @@
-# test a video flow diffusion model based on RegionMM for MUG dataset
+# test a video flow diffusion model based on RegionMM
 
 import argparse
 
@@ -11,35 +11,32 @@ import os
 import timeit
 from PIL import Image
 from misc import grid2fig, conf2fig
-from datasets_mug import MUG_test
+from DM.datasets_mhad import MHAD_test
 import random
 from DM.modules.video_flow_diffusion_model import FlowDiffusion
 
 
 start = timeit.default_timer()
 BATCH_SIZE = 10
-root_dir = '/data/hfn5052/text2motion/videoflowdiff_mug'
-data_dir = "/data/hfn5052/text2motion/dataset/MUG"
-GPU = "5"
-postfix = "-j-sl-vr-of-tr-rmm"
-# default value
-ddim_sampling_eta = 1.0
-timesteps = 1000
+root_dir = '/data/hfn5052/text2motion/videoflowdiff_mhad'
+data_dir = "/data/hfn5052/text2motion/dataset/MHAD/crop_image"
+GPU = "3"
+postfix = "-j-sl-random-of"
 if "ddim" in postfix:
-    sampling_step = 10
-    ddim_sampling_eta = 1.0
-    postfix = postfix + "%04d_%.2f" % (sampling_step, ddim_sampling_eta)
+    sampling_timesteps = 10
+    postfix = "-j-sl-random-of-ddim%04d" % sampling_timesteps
 else:
-    sampling_step = 1000
+    sampling_timesteps = 1000
 INPUT_SIZE = 128
 N_FRAMES = 40
 RANDOM_SEED = 1234
 NUM_VIDEOS = 10
 NUM_ITER = NUM_VIDEOS // BATCH_SIZE
 MEAN = (0.0, 0.0, 0.0)
-cond_scale = 1.0
+cond_scale = 1.
 # the path to trained DM
-RESTORE_FROM = "/data/hfn5052/text2motion/videoflowdiff_mug/snapshots-j-sl-vr-of-tr-rmm/flowdiff_0005_S111600.pth"
+RESTORE_FROM = "/data/hfn5052/text2motion/videoflowdiff/snapshots-joint-steplr-random-onlyflow-train-regionmm/" \
+               "flowdiff_0006_S086400.pth"
 CKPT_DIR = os.path.join(root_dir, "ckpt"+postfix)
 os.makedirs(CKPT_DIR, exist_ok=True)
 IMG_DIR = os.path.join(root_dir, "ckpt_img"+postfix)
@@ -48,7 +45,7 @@ print(root_dir)
 print(postfix)
 print("RESTORE_FROM:", RESTORE_FROM)
 print("cond scale:", cond_scale)
-print("sampling step:", sampling_step)
+print("sampling timesteps:", sampling_timesteps)
 
 
 def get_arguments():
@@ -96,12 +93,9 @@ def main():
     setup_seed(args.random_seed)
 
     model = FlowDiffusion(is_train=True,
-                          sampling_timesteps=sampling_step,
-                          ddim_sampling_eta=ddim_sampling_eta,
-                          timesteps=timesteps,
-                          config_pth="/workspace/code/demo-dgx2/RegionMM/mug128.yaml",
-                          pretrained_pth="/data/hfn5052/text2motion/RegionMM/log-mug/mug128/"
-                                         "snapshots/RegionMM_0100_S046500.pth")
+                          sampling_timesteps=sampling_timesteps,
+                          config_pth="/workspace/code/demo-dgx2/RegionMM/mhad128.yaml",
+                          pretrained_pth="/data/hfn5052/text2motion/RegionMM/log/mhad128/snapshots/RegionMM_0100_S043100.pth")
     model.cuda()
 
     if args.restore_from:
@@ -120,10 +114,10 @@ def main():
     model.eval()
 
     setup_seed(args.random_seed)
-    testloader = data.DataLoader(MUG_test(data_dir=data_dir,
-                                          image_size=args.input_size,
-                                          num_frames=N_FRAMES,
-                                          mean=MEAN),
+    testloader = data.DataLoader(MHAD_test(data_dir=data_dir,
+                                           image_size=args.input_size,
+                                           num_frames=N_FRAMES,
+                                           mean=MEAN),
                                  batch_size=args.batch_size,
                                  shuffle=True, num_workers=args.num_workers,
                                  pin_memory=True)
@@ -155,8 +149,6 @@ def main():
         model.sample_one_video(cond_scale=cond_scale)
 
         for batch_idx in range(bs):
-            # model.set_sample_input(sample_img=ref_imgs[batch_idx].unsqueeze(dim=0), sample_text=[ref_texts[batch_idx]])
-            # model.sample_one_video(cond_scale=cond_scale)
             # save one video
             msk_size = ref_imgs.shape[-1]
             save_src_img = sample_img(ref_imgs, batch_idx)
@@ -209,8 +201,6 @@ def main():
 
     end = timeit.default_timer()
     print(end - start, 'seconds')
-    print(CKPT_DIR)
-    print(IMG_DIR)
 
 
 class AverageMeter(object):

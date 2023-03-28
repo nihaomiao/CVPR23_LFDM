@@ -2,6 +2,7 @@
 # using RegionMM
 
 import argparse
+
 import imageio
 import torch
 from torch.utils import data
@@ -11,18 +12,18 @@ import os
 import timeit
 from PIL import Image
 from misc import grid2fig
-from DM.datasets_mug import MUG_test
+from DM.datasets_mhad import MHAD_test
 import random
 from LFAE.modules.flow_autoenc import FlowAE
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 from LFAE.modules.util import Visualizer
 import json_tricks as json
 
-
 start = timeit.default_timer()
 BATCH_SIZE = 10
-root_dir = '/data/hfn5052/text2motion/flowautoenc_video_mug'  # your work directory
-data_dir = "/data/hfn5052/text2motion/dataset/MUG"  # the path to MUG dataset
+root_dir = '/data/hfn5052/text2motion/flowautoenc_video_mhad'
+data_dir = "/data/hfn5052/text2motion/dataset/MHAD/crop_image"
 GPU = "6"
 postfix = ""
 INPUT_SIZE = 128
@@ -33,8 +34,8 @@ NUM_ITER = NUM_VIDEOS // BATCH_SIZE
 RANDOM_SEED = 1234
 MEAN = (0.0, 0.0, 0.0)
 # the path to trained LFAE model
-RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log-mug/mug128/snapshots/RegionMM_0100_S046500.pth"
-config_pth = "/workspace/code/CVPR23_LFDM/config/mug128.yaml"
+RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log/mhad128/snapshots/RegionMM_0100_S043100.pth"
+config_pth = "/workspace/code/CVPR23_LFDM/config/mhad128.yaml"
 
 CKPT_DIR = os.path.join(root_dir, "flowae-res"+postfix)
 os.makedirs(CKPT_DIR, exist_ok=True)
@@ -110,10 +111,10 @@ def main():
 
     setup_seed(args.random_seed)
 
-    testloader = data.DataLoader(MUG_test(data_dir=data_dir,
-                                          image_size=args.input_size,
-                                          num_frames=N_FRAMES,
-                                          mean=MEAN),
+    testloader = data.DataLoader(MHAD_test(data_dir=data_dir,
+                                           image_size=args.input_size,
+                                           num_frames=N_FRAMES,
+                                           mean=MEAN),
                                  batch_size=args.batch_size,
                                  shuffle=True, num_workers=args.num_workers,
                                  pin_memory=True)
@@ -130,7 +131,6 @@ def main():
     l1_loss = torch.nn.L1Loss(reduction='sum')
 
     global_iter = 0
-
     while global_iter < NUM_ITER:
         for i_iter, batch in enumerate(testloader):
             if i_iter >= NUM_ITER:
@@ -247,3 +247,4 @@ def setup_seed(seed):
 
 if __name__ == '__main__':
     main()
+

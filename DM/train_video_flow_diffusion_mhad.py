@@ -12,27 +12,22 @@ import timeit
 import math
 from PIL import Image
 from misc import Logger, grid2fig, conf2fig
-from datasets_mug import MUG
+from DM.datasets_mhad import MHAD
 import sys
 import random
 from DM.modules.video_flow_diffusion_model import FlowDiffusion
 from torch.optim.lr_scheduler import MultiStepLR
 
 start = timeit.default_timer()
-BATCH_SIZE = 5
+BATCH_SIZE = 6
 MAX_EPOCH = 1200
 epoch_milestones = [800, 1000]
-root_dir = '/data/hfn5052/text2motion/videoflowdiff_mug'
-data_dir = "/data/hfn5052/text2motion/MUG"
-GPU = "1"
-postfix = "-j-sl-vr-of-tr-rmm"
+root_dir = '/data/hfn5052/text2motion/videoflowdiff_mhad'
+data_dir = "/data/hfn5052/text2motion/dataset/MHAD/crop_image"
+GPU = "0"
+postfix = "-joint-steplr-random-onlyflow-train-regionmm"  # sl: step-lr, rmm:regionmm
 joint = "joint" in postfix or "-j" in postfix  # allow joint training with unconditional model
-if "random" in postfix:
-    frame_sampling = "random"
-elif "-vr" in postfix:
-    frame_sampling = "very_random"
-else:
-    frame_sampling = "uniform"
+frame_sampling = "random" if "random" in postfix else "uniform"  # frame sampling strategy
 only_use_flow = "onlyflow" in postfix or "-of" in postfix  # whether only use flow loss
 if joint:
     null_cond_prob = 0.1
@@ -40,9 +35,9 @@ else:
     null_cond_prob = 0.0
 split_train_test = "train" in postfix or "-tr" in postfix
 use_residual_flow = "-rf" in postfix
-config_pth = "/workspace/code/CVPR23_LFDM/config/mug128.yaml"
+config_pth = "/workspace/code/CVPR23_LFDM/config/mhad128.yaml"
 # put your pretrained LFAE here
-AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log-mug/mug128/snapshots/RegionMM_0100_S046500.pth"
+AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log/mhad128/snapshots/RegionMM_0100_S043100.pth"
 INPUT_SIZE = 128
 N_FRAMES = 40
 LEARNING_RATE = 2e-4
@@ -53,11 +48,11 @@ SNAPSHOT_DIR = os.path.join(root_dir, 'snapshots'+postfix)
 IMGSHOT_DIR = os.path.join(root_dir, 'imgshots'+postfix)
 VIDSHOT_DIR = os.path.join(root_dir, "vidshots"+postfix)
 SAMPLE_DIR = os.path.join(root_dir, 'sample'+postfix)
-NUM_EXAMPLES_PER_EPOCH = 465
+NUM_EXAMPLES_PER_EPOCH = 431
 NUM_STEPS_PER_EPOCH = math.ceil(NUM_EXAMPLES_PER_EPOCH / float(BATCH_SIZE))
 MAX_ITER = max(NUM_EXAMPLES_PER_EPOCH * MAX_EPOCH + 1,
                NUM_STEPS_PER_EPOCH * BATCH_SIZE * MAX_EPOCH + 1)
-SAVE_MODEL_EVERY = NUM_STEPS_PER_EPOCH * (MAX_EPOCH // 4)
+SAVE_MODEL_EVERY = NUM_STEPS_PER_EPOCH * (MAX_EPOCH // 3)
 SAVE_VID_EVERY = 1000
 SAMPLE_VID_EVERY = 2000
 UPDATE_MODEL_EVERY = 3000
@@ -162,7 +157,7 @@ def main():
                           pretrained_pth=AE_RESTORE_FROM)
     model.cuda()
 
-    # Not set model to be train mode! Because pretrained flow autoenc need to be eval (BatchNorm)
+    # Not set model to be train mode! Because pretrained flow autoenc need to be eval
 
     if args.fine_tune:
         pass
@@ -185,12 +180,13 @@ def main():
         print("NO checkpoint found!")
 
     setup_seed(args.random_seed)
-    trainloader = data.DataLoader(MUG(data_dir=data_dir,
-                                      image_size=INPUT_SIZE,
-                                      num_frames=N_FRAMES,
-                                      color_jitter=True,
-                                      sampling=frame_sampling,
-                                      mean=MEAN),
+    trainloader = data.DataLoader(MHAD(data_dir=data_dir,
+                                       image_size=INPUT_SIZE,
+                                       num_frames=N_FRAMES,
+                                       color_jitter=True,
+                                       split_train_test=True,
+                                       sampling=frame_sampling,
+                                       mean=MEAN),
                                   batch_size=args.batch_size,
                                   shuffle=True, num_workers=args.num_workers,
                                   pin_memory=True)
