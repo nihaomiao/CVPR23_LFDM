@@ -8,6 +8,10 @@ This repository is still under development.
 
 Updates
 -----
+[Updated on 03/27/2023] Added the illustration of training a LFDM for MHAD dataset.
+
+[Updated on 03/27/2023] Released a testing demo for MHAD dataset.
+
 [Updated on 03/26/2023] Added the illustration of training a LFDM for MUG dataset.
 
 [Updated on 03/26/2023] Now our paper is available on [arXiv](https://arxiv.org/abs/2303.13744).
@@ -50,8 +54,10 @@ Pretrained Models
 
 |Dataset|Model| Frame Sampling |Link (Google Drive)|
 |-------|------|----------------|-----|
-|MUG|LFAE| random         |https://drive.google.com/file/d/1dRn1wl5TUaZJiiDpIQADt1JJ0_q36MVG/view?usp=share_link|
-|MUG|DM| random         |   https://drive.google.com/file/d/1lPVIT_cXXeOVogKLhD9fAT4k1Brd_HHn/view?usp=share_link |
+|MUG|LFAE| -         |https://drive.google.com/file/d/1dRn1wl5TUaZJiiDpIQADt1JJ0_q36MVG/view?usp=share_link|
+|MUG|DM| very_random         |   https://drive.google.com/file/d/1lPVIT_cXXeOVogKLhD9fAT4k1Brd_HHn/view?usp=share_link |
+|MHAD|LFAE|-|https://drive.google.com/file/d/1AVtpKbzqsXdIK-_vHUuQQIGx6Wa5PxS0/view?usp=sharing|
+|MHAD|DM|random|https://drive.google.com/file/d/1BoFPQAeOuHE5wt7h-chhYAO-dU0B1p2y/view?usp=sharing|
 
 Demo
 -----
@@ -59,6 +65,11 @@ Demo
 
 1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
 2. Run `python -u demo/demo_mug.py` to generate the example videos. Please set the paths in the code files and config file `config/mug128.yaml` if needed. The pretrained models for MUG dataset have released. 
+
+**MHAD Dataset**
+
+1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
+2. Run `python -u demo/demo_mhad.py` to generate the example videos. Please set the paths in the code files and config file `config/mhad128.yaml` if needed. The pretrained models for MHAD dataset have released. 
 
 Training LFDM
 ----
@@ -74,6 +85,15 @@ The training of our LFDM includes two stages: 1. train a latent flow autoencoder
 6. Run `python -u DM/train_video_flow_diffusion_mug.py` to train the DM. Please set the paths and config file `config/mug128.yaml` if needed. 
 7. Once DM is trained, you may test its generation performance by running `python -u DM/test_video_flow_diffusion_mug.py`.
 
+**MHAD Dataset**
+
+1. Download MHAD dataset from their [website](https://personal.utdallas.edu/~kehtar/UTD-MHAD.html). 
+2. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
+3. Crop the video frames and split the train/test set. You may use the same cropping method and split as ours, which can be found in `preprocessing/preprocess_MHAD.py`.
+4. Run `python -u LFAE/run_mhad.py` to train the LFAE. Please set the paths and config file `config/mhad128.yaml` if needed. 
+5. Once LFAE is trained, you may measure its self-reconstruction performance by running `python -u LFAE/test_flowautoenc_mhad.py`.
+6. Run `python -u DM/train_video_flow_diffusion_mhad.py` to train the DM. Please set the paths and config file `config/mhad128.yaml` if needed. 
+7. Once DM is trained, you may test its generation performance by running `python -u DM/test_video_flow_diffusion_mhad.py`.
 
 Citing LFDM
 -------
