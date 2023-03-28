@@ -152,9 +152,9 @@ def main():
         save_src_img = sample_img(ref_imgs, 0)
         new_im_list = []
 
-        img_dir_name = "%04d_%s_%.2f" % (cnt, ref_img_name, cond_scale)
-        cur_img_dir = os.path.join(IMG_DIR, img_dir_name)
-        os.makedirs(cur_img_dir, exist_ok=True)
+        # img_dir_name = "%04d_%s_%.2f" % (cnt, ref_img_name, cond_scale)
+        # cur_img_dir = os.path.join(IMG_DIR, img_dir_name)
+        # os.makedirs(cur_img_dir, exist_ok=True)
 
         for frame_idx in range(nf):
             save_sample_out_img = sample_img(model.sample_out_vid[:, :, frame_idx], 0)
