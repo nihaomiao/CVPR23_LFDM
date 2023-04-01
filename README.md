@@ -8,6 +8,8 @@ This repository is still under development.
 
 Updates
 -----
+[Updated on 03/31/2023] Added the illustration of training a LFDM for NATOPS dataset.
+
 [Updated on 03/27/2023] Added the illustration of training a LFDM for MHAD dataset.
 
 [Updated on 03/27/2023] Released a testing demo for MHAD dataset.
@@ -56,8 +58,10 @@ Pretrained Models
 |-------|------|----------------|-----|
 |MUG|LFAE| -         |https://drive.google.com/file/d/1dRn1wl5TUaZJiiDpIQADt1JJ0_q36MVG/view?usp=share_link|
 |MUG|DM| very_random         |   https://drive.google.com/file/d/1lPVIT_cXXeOVogKLhD9fAT4k1Brd_HHn/view?usp=share_link |
-|MHAD|LFAE|-|https://drive.google.com/file/d/1AVtpKbzqsXdIK-_vHUuQQIGx6Wa5PxS0/view?usp=sharing|
-|MHAD|DM|random|https://drive.google.com/file/d/1BoFPQAeOuHE5wt7h-chhYAO-dU0B1p2y/view?usp=sharing|
+|MHAD|LFAE|-|https://drive.google.com/file/d/1AVtpKbzqsXdIK-_vHUuQQIGx6Wa5PxS0/view?usp=share_link|
+|MHAD|DM|random|https://drive.google.com/file/d/1BoFPQAeOuHE5wt7h-chhYAO-dU0B1p2y/view?usp=share_link|
+|NATOPS|LFAE|-|https://drive.google.com/file/d/10iyzoYqSwzQ3fZgb6oh3Uay-P7k2A12s/view?usp=share_link|
+|NATOPS|DM|very_random|https://drive.google.com/file/d/1lSLSzS_KyGvJ7dW3l5hLJLR9k2k8LoU3/view?usp=share_link|
 
 Demo
 -----
@@ -94,6 +98,16 @@ The training of our LFDM includes two stages: 1. train a latent flow autoencoder
 5. Once LFAE is trained, you may measure its self-reconstruction performance by running `python -u LFAE/test_flowautoenc_mhad.py`.
 6. Run `python -u DM/train_video_flow_diffusion_mhad.py` to train the DM. Please set the paths and config file `config/mhad128.yaml` if needed. 
 7. Once DM is trained, you may test its generation performance by running `python -u DM/test_video_flow_diffusion_mhad.py`.
+
+**NATOPS Dataset**
+
+1. Download NATOPS dataset from their [website](https://github.com/yalesong/natops). 
+2. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
+3. Segment the video and split the train/test set. You may use the same segmenting method and split as ours, which can be found in `preprocessing/preprocess_NATOPS.py`.
+4. Run `python -u LFAE/run_natops.py` to train the LFAE. Please set the paths and config file `config/natops128.yaml` if needed. 
+5. Once LFAE is trained, you may measure its self-reconstruction performance by running `python -u LFAE/test_flowautoenc_natops.py`.
+6. Run `python -u DM/train_video_flow_diffusion_natops.py` to train the DM. Please set the paths and config file `config/natops128.yaml` if needed. 
+7. Once DM is trained, you may test its generation performance by running `python -u DM/test_video_flow_diffusion_natops.py`.
 
 Citing LFDM
 -------
