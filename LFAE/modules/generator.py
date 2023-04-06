@@ -95,6 +95,7 @@ class Generator(nn.Module):
             skips.append(out)
 
         output_dict = {}
+        output_dict["bottle_neck_feat"] = out
         if self.pixelwise_flow_predictor is not None:
             motion_params = self.pixelwise_flow_predictor(source_image=source_image,
                                                           driving_region_params=driving_region_params,
