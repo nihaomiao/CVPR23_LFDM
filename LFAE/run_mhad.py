@@ -77,7 +77,7 @@ if __name__ == "__main__":
     setup_seed(opt.random_seed)
 
     with open(opt.config) as f:
-        config = yaml.load(f)
+        config = yaml.safe_load(f)
 
     log_dir = os.path.join(opt.log_dir, os.path.basename(opt.config).split('.')[0]+opt.postfix)
     if not os.path.exists(log_dir):
