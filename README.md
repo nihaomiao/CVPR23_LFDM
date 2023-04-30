@@ -111,13 +111,11 @@ Citing LFDM
 -------
 If you find our approaches useful in your research, please consider citing:
 ```
-@misc{ni2023conditional,
-      title={Conditional Image-to-Video Generation with Latent Flow Diffusion Models}, 
-      author={Haomiao Ni and Changhao Shi and Kai Li and Sharon X. Huang and Martin Renqiang Min},
-      year={2023},
-      eprint={2303.13744},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@article{ni2023conditional,
+  title={Conditional Image-to-Video Generation with Latent Flow Diffusion Models},
+  author={Ni, Haomiao and Shi, Changhao and Li, Kai and Huang, Sharon X and Min, Martin Renqiang},
+  journal={arXiv preprint arXiv:2303.13744},
+  year={2023}
 }
 ```
 
