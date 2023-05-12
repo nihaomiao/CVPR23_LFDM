@@ -6,6 +6,8 @@ The pytorch implementation of our CVPR 2023 paper [Conditional Image-to-Video Ge
 
 Updates
 -----
+[Updated on 05/12/2023] Released a testing demo for NATOPS dataset.
+
 [Updated on 03/31/2023] Added the illustration of training a LFDM for NATOPS dataset.
 
 [Updated on 03/27/2023] Added the illustration of training a LFDM for MHAD dataset.
@@ -59,7 +61,7 @@ Pretrained Models
 |MHAD|LFAE|-|https://drive.google.com/file/d/1AVtpKbzqsXdIK-_vHUuQQIGx6Wa5PxS0/view?usp=share_link|
 |MHAD|DM|random|https://drive.google.com/file/d/1BoFPQAeOuHE5wt7h-chhYAO-dU0B1p2y/view?usp=share_link|
 |NATOPS|LFAE|-|https://drive.google.com/file/d/10iyzoYqSwzQ3fZgb6oh3Uay-P7k2A12s/view?usp=share_link|
-|NATOPS|DM|very_random|https://drive.google.com/file/d/1lSLSzS_KyGvJ7dW3l5hLJLR9k2k8LoU3/view?usp=share_link|
+|NATOPS|DM|random|https://drive.google.com/file/d/1lSLSzS_KyGvJ7dW3l5hLJLR9k2k8LoU3/view?usp=share_link|
 
 Demo
 -----
@@ -72,6 +74,11 @@ Demo
 
 1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
 2. Run `python -u demo/demo_mhad.py` to generate the example videos. Please set the paths in the code files and config file `config/mhad128.yaml` if needed. The pretrained models for MHAD dataset have released. 
+
+**NATOPS Dataset**
+
+1. Install required dependencies. Here we use Python 3.7.10 and Pytorch 1.12.1, etc.
+2. Run `python -u demo/demo_natops.py` to generate the example videos. Please set the paths in the code files and config file `config/natops128.yaml` if needed. The pretrained models for NATOPS dataset have released. 
 
 Training LFDM
 ----
