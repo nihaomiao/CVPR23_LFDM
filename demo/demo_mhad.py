@@ -33,8 +33,6 @@ AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log/mhad128/snapshots/Regi
 config_pth = "/workspace/code/CVPR23_LFDM/config/mug128.yaml"
 CKPT_DIR = os.path.join(root_dir, "demo"+postfix)
 os.makedirs(CKPT_DIR, exist_ok=True)
-# IMG_DIR = os.path.join(root_dir, "demo_img"+postfix)
-# os.makedirs(IMG_DIR, exist_ok=True)
 print(root_dir)
 print(postfix)
 print("RESTORE_FROM:", RESTORE_FROM)
@@ -152,10 +150,6 @@ def main():
         save_src_img = sample_img(ref_imgs, 0)
         new_im_list = []
 
-        # img_dir_name = "%04d_%s_%.2f" % (cnt, ref_img_name, cond_scale)
-        # cur_img_dir = os.path.join(IMG_DIR, img_dir_name)
-        # os.makedirs(cur_img_dir, exist_ok=True)
-
         for frame_idx in range(nf):
             save_sample_out_img = sample_img(model.sample_out_vid[:, :, frame_idx], 0)
             save_sample_warp_img = sample_img(model.sample_warped_vid[:, :, frame_idx], 0)
@@ -170,9 +164,6 @@ def main():
             new_im.paste(Image.fromarray(save_fake_conf, 'L'), (msk_size * 4, 0))
             new_im_arr = np.array(new_im)
             new_im_list.append(new_im_arr)
-            # # save frame
-            # new_im_name = "%03d_%04d_%s_%.2f.png" % (frame_idx, cnt, ref_img_name, cond_scale)
-            # imageio.imsave(os.path.join(cur_img_dir, new_im_name), new_im_arr)
 
         video_name = "%04d_%s_%.2f.gif" % (cnt, ref_img_name, cond_scale)
         print(video_name)

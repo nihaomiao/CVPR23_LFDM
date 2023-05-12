@@ -19,7 +19,7 @@ BATCH_SIZE = 1
 root_dir = '/data/hfn5052/text2motion/videoflowdiff_natops'
 data_dir = "/data/hfn5052/text2motion/dataset/NATOPS/split_img_data"
 GPU = "3"
-postfix = "-j-vr-of-lnc-upconv"
+postfix = "-j-of-lnc-upconv"
 
 if "ddim" in postfix:
     sampling_timesteps = 200
@@ -44,7 +44,7 @@ MEAN = (0.0, 0.0, 0.0)
 cond_scale = 1.
 config_pth = "/workspace/code/CVPR23_LFDM/config/natops128.yaml"
 # put your trained DM model here
-RESTORE_FROM = "/data/hfn5052/text2motion/videoflowdiff_natops/snapshots-j-vr-of-lnc-upconv/flowdiff_0020_S048000.pth"
+RESTORE_FROM = "/data/hfn5052/text2motion/videoflowdiff_natops/snapshots-j-of-lnc-upconv/flowdiff_0020_S033600.pth"
 # pu your trained LFAE model here
 AE_RESTORE_FROM = "/data/hfn5052/text2motion/RegionMM/log-natops/natops128-crop/snapshots-crop/RegionMM_0100_S024000.pth"
 CKPT_DIR = os.path.join(root_dir, "ckpt"+postfix)
