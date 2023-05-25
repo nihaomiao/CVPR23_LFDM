@@ -118,10 +118,11 @@ Citing LFDM
 -------
 If you find our approaches useful in your research, please consider citing:
 ```
-@article{ni2023conditional,
+@inproceedings{ni2023conditional,
   title={Conditional Image-to-Video Generation with Latent Flow Diffusion Models},
   author={Ni, Haomiao and Shi, Changhao and Li, Kai and Huang, Sharon X and Min, Martin Renqiang},
-  journal={arXiv preprint arXiv:2303.13744},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={18444--18455},
   year={2023}
 }
 ```
