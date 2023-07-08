@@ -6,6 +6,8 @@ The pytorch implementation of our CVPR 2023 paper [Conditional Image-to-Video Ge
 
 Updates
 -----
+[Updated on 07/08/2023] Added multi-GPU training codes for MHAD dataset.
+
 [Updated on 05/12/2023] Released a testing demo for NATOPS dataset.
 
 [Updated on 03/31/2023] Added the illustration of training a LFDM for NATOPS dataset.
