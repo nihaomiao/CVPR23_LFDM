@@ -84,7 +84,7 @@ Demo
 
 Training LFDM
 ----
-The training of our LFDM includes two stages: 1. train a latent flow autoencoder (LFAE) in an unsupervised fashion; 2. train a diffusion model (DM) on the latent space of LFAE.
+The training of our LFDM includes two stages: 1. train a latent flow autoencoder (LFAE) in an unsupervised fashion. To accelerate the training, we initialize LFAE with the pretrained models provided by MRAA, which can be found in their [github](https://github.com/snap-research/articulated-animation/tree/db2c2135273f601a370e2b62754f9bb56cfd25d5/checkpoints); 2. train a diffusion model (DM) on the latent space of LFAE.
 
 **MUG Dataset**
 
