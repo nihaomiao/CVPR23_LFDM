@@ -1,3 +1,5 @@
+!!! Check out our new CVPR 2024 [paper](https://arxiv.org/abs/2404.16306) designed for text-conditioned image-to-video generation
+
 LFDM
 =====
 The pytorch implementation of our CVPR 2023 paper [Conditional Image-to-Video Generation with Latent Flow Diffusion Models](https://arxiv.org/abs/2303.13744).
