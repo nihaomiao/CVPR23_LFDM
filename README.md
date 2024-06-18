@@ -1,4 +1,4 @@
-!!! Check out our new CVPR 2024 [paper](https://arxiv.org/abs/2404.16306) designed for text-conditioned image-to-video generation
+!!! Check out our new CVPR 2024 [paper](https://arxiv.org/abs/2404.16306) and [code](https://github.com/merlresearch/TI2V-Zero) designed for text-conditioned image-to-video generation
 
 LFDM
 =====
